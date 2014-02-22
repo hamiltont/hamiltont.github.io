@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    <title>Ghostbuster Containment</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="../favicon.ico">
+
+    
+    <link rel="stylesheet" type="text/css" href="../assets/css/screen.css?v=7a8797edde" />
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
+
+    
+    <meta name="generator" content="Ghost 0.4" />
+<link rel="alternate" type="application/rss+xml" title="Ghost" href="../rss/index.html">
+<link rel="canonical" href="http://my-ghost-blog.com/ghostbuster-containment/" />
+</head>
+<body class="post-template">
+
+    
+    
+
+
+
+<main class="content" role="main">
+
+    <article class="post">
+
+        
+        <header class="post-header">
+            <a class="blog-logo" href="http://my-ghost-blog.com">
+                
+                    <span class="blog-title">Ghost</span>
+                
+            </a>
+        </header>
+
+        
+        
+
+            <span class="post-meta"><time datetime="2014-02-22">22 Feb 2014</time> </span>
+
+            <h1 class="post-title">Ghostbuster Containment</h1>
+
+            <section class="post-content">
+                <p>I recently built a <a href="https://github.com/axitkhurana/buster/pull/17">Dockerfile</a> for <a href="https://github.com/axitkhurana/buster">Buster</a>, a static website generator for <a href="https://ghost.org/">Ghost</a>. In fact, that's how this site is currently published to Github pages!</p>
+
+<p>The interesting obstacle was pushing to Github from inside of a docker container. While typically this requires SSH private keys, it turns out you can authenticate with your username and password over HTTPS. Even better, you can use a <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use">Github access token</a>. By using this token in the URL, we can achieve HTTP authentication as so: </p>
+
+<pre><code>https://&lt;token&gt;@github.com/&lt;user&gt;/&lt;repo&gt;.git
+</code></pre>
+
+<p>Note that there is no password required, and you had better use https! This still isn't as secure as SSH, but it allowed me to build a container that can be run without requiring any user-specific data inside the container, as so: </p>
+
+<pre><code>$ sudo docker run hamiltont/btest --token &lt;my_token&gt;
+</code></pre>
+
+<p>Now, no users will accidentally push their private key to the Docker index! It's not perfect--the token may be exposed in log files and process lists for any users with sudo powers. </p>
+
+<p>My final annoyance is that GitPython seems to be unable to read the user properly from inside a Docker containter. I "fixed" it by setting an environment variable, but I suspect there is a better method...</p>
+            </section>
+
+            <footer class="post-footer">
+
+                <section class="author">
+                    <h4>Hamilton Turner</h4>
+                    <p></p>
+                </section>
+
+                <section class="share">
+                    <h4>Share this post</h4>
+                    <a class="icon-twitter" href="http://twitter.com/share?text=Ghostbuster%20Containment&url=http://my-ghost-blog.com/ghostbuster-containment/"
+                        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                        <span class="hidden">Twitter</span>
+                    </a>
+                    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://my-ghost-blog.com/ghostbuster-containment/"
+                        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                        <span class="hidden">Facebook</span>
+                    </a>
+                    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://my-ghost-blog.com/ghostbuster-containment/"
+                       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                        <span class="hidden">Google+</span>
+                    </a>
+                </section>
+
+            </footer>
+
+        
+
+    </article>
+
+</main>
+
+    <footer class="site-footer">
+        <a class="subscribe icon-feed" href="http://my-ghost-blog.com/rss/"><span class="tooltip">Subscribe!</span></a>
+        <div class="inner">
+             <section class="copyright">All content copyright <a href="http://my-ghost-blog.com/">Ghost</a> &copy; 2014 &bull; All rights reserved.</section>
+             <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://ghost.org">Ghost</a></section>
+        </div>
+    </footer>
+
+    
+    <script src="../shared/vendor/jquery/jquery.js?v=7a8797edde"></script>
+
+    
+    <script type="text/javascript" src="../assets/js/jquery.fitvids.js?v=7a8797edde"></script>
+    <script type="text/javascript" src="../assets/js/index.js?v=7a8797edde"></script>
+
+</body>
+</html>
